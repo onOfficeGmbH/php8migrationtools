@@ -1,0 +1,70 @@
+default:
+  interruptible: true
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/alpine
+
+stages:
+  - test
+
+phpunit:
+  parallel:
+    matrix:
+      - PHP_VERSION: ['8', '7']
+  image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/alpine:3.15"
+  stage: test
+  script:
+    - |
+      apk add composer \
+        "php${PHP_VERSION}" \
+        "php${PHP_VERSION}-dom" \
+        "php${PHP_VERSION}-phar" \
+        "php${PHP_VERSION}-iconv" \
+        "php${PHP_VERSION}-phar" \
+        "php${PHP_VERSION}-json" \
+        "php${PHP_VERSION}-mbstring" \
+        "php${PHP_VERSION}-openssl" \
+        "php${PHP_VERSION}-curl" \
+        "php${PHP_VERSION}-xml" \
+        "php${PHP_VERSION}-xmlwriter" \
+        "php${PHP_VERSION}-tokenizer" \
+        "php${PHP_VERSION}-simplexml" \
+        "php${PHP_VERSION}-xdebug"
+    - php${PHP_VERSION} /usr/bin/composer.phar install
+    - php${PHP_VERSION} vendor/bin/phpunit --log-junit phpunit-result.xml tests
+    - php${PHP_VERSION} vendor/bin/phpstan analyse --memory-limit=2G src/ tests/ functions/ --error-format=gitlab | tee phpstan.json
+
+test_refactor:
+  image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/alpine:3.15"
+  stage: test
+  script:
+    - |
+      apk add composer \
+        "php8" \
+        "php8-dom" \
+        "php8-phar" \
+        "php8-iconv" \
+        "php8-phar" \
+        "php8-json" \
+        "php8-mbstring" \
+        "php8-openssl" \
+        "php8-curl" \
+        "php8-xml" \
+        "php8-xmlwriter" \
+        "php8-tokenizer" \
+        "php8-simplexml" \
+        "php8-xdebug"
+    - php8 /usr/bin/composer.phar install
+    - cd tests/IntegrationTests
+    - php8 ../../vendor/bin/rector --config ../Examples/rector.php --dry-run --no-ansi > actual.txt || true
+    - diff -b expected.txt actual.txt
+    - cd ../..
+    - php8 vendor/bin/rector --config tests/Examples/rector.php || true
+    - php8 vendor/bin/phpstan analyse --memory-limit=2G tests/Rules/ --level 9 --error-format=gitlab | tee phpstan.json
+
+
+  artifacts:
+    paths:
+      - phpstan.json
+    when: always
+    reports:
+      codequality:
+        - phpstan.json

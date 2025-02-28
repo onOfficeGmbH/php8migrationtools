@@ -1,0 +1,192 @@
+
+4 files with changes
+====================
+
+1) ../Rules/switch.php:0
+
+    ---------- begin diff ----------
+@@ @@
+ <?php
+
+ $array = [0, 1, 2, 3, 4, 5];
++$switchTmp5 = array_shift($array);
+
+-switch (array_shift($array)) {
+-    case 6:
++switch (true) {
++    case c_eq($switchTmp5, 6):
+         echo 6;
+         break;
+-    case 5:
++    case c_eq($switchTmp5, 5):
+         echo 5;
+         break;
+
+-    case 4:
++    case c_eq($switchTmp5, 4):
+         echo 4;
+         break;
+
+-    case 3:
++    case c_eq($switchTmp5, 3):
+         echo 3;
+         break;
+
+-    case 2:
++    case c_eq($switchTmp5, 2):
+         echo 2;
+         break;
+
+-    case 1:
++    case c_eq($switchTmp5, 1):
+         echo 1;
+         break;
+
+     default:
+-    case 0:
++    case c_eq($switchTmp5, 0):
+         echo 0;
+         break;
+
+@@ @@
+
+     public function someFn(): ?int
+     {
+-        switch ($this->t) {
+-            case 3:
++        switch (true) {
++            case c_eq($this->t, 3):
+                 return 7;
+-            case 2:
++            case c_eq($this->t, 2):
+                 return 6;
+             default:
+                 return null;
+@@ @@
+
+     public function someOtherFn(): bool
+     {
+-        switch (self::C) {
+-            case 3:
++        switch (true) {
++            case c_eq(self::C, 3):
+                 return true;
+             default:
+                 return false;
+@@ @@
+ }
+
+ $i = 2;
++$switchTmp78 = $i++;
+
+-switch ($i++) {
+-    case 6:
++switch (true) {
++    case c_eq($switchTmp78, 6):
+         echo 6;
+         break;
+-    case 5:
++    case c_eq($switchTmp78, 5):
+         echo 5;
+         break;
+
+-    case 4:
++    case c_eq($switchTmp78, 4):
+         echo 4;
+         break;
+
+-    case 3:
++    case c_eq($switchTmp78, 3):
+         echo 3;
+         break;
+
+-    case 2:
++    case c_eq($switchTmp78, 2):
+         echo 2;
+         break;
+
+-    case 1:
++    case c_eq($switchTmp78, 1):
+         echo 1;
+         break;
+
+     default:
+-    case 0:
++    case c_eq($switchTmp78, 0):
+         echo 0;
+         break;
+
+ }
++$switchTmp109 = ['a' => $i++];
+
+-switch (['a' => $i++]) {
+-    case 6:
++switch (true) {
++    case c_eq($switchTmp109, 6):
+         echo 6;
+         break;
+-    case 5:
++    case c_eq($switchTmp109, 5):
+         echo 5;
+         break;
+     default:
+    ----------- end diff -----------
+
+Applied rules:
+ * SwitchWithPhp7Behavior
+
+
+2) ../Rules/in_array.php:0
+
+    ---------- begin diff ----------
+@@ @@
+ <?php
+
+-$result = in_array('a', ['a']);
+-$result = in_array('a', ['a'], false);
++$result = c_inArray('a', ['a']);
++$result = c_inArray('a', ['a']);
+ $result = in_array('a', ['a'], true);
+    ----------- end diff -----------
+
+Applied rules:
+ * StringComparisonInArray
+
+
+3) ../Rules/array_search.php:0
+
+    ---------- begin diff ----------
+@@ @@
+ <?php
+
+-$result = array_search('a', [0]);
+-$result = array_search('a', [0], false);
++$result = c_arraySearch('a', [0]);
++$result = c_arraySearch('a', [0]);
+ $result = array_search('a', [0], true);
+    ----------- end diff -----------
+
+Applied rules:
+ * StringComparisonArraySearch
+
+
+4) ../Rules/array_keys.php:0
+
+    ---------- begin diff ----------
+@@ @@
+ <?php
+
+ $result = array_keys([1, 2, 3]);
+-$result = array_keys([1, 2, 3], 2);
+-$result = array_keys([1, 2, 3], 2, false);
++$result = c_arrayKeys([1, 2, 3], 2);
++$result = c_arrayKeys([1, 2, 3], 2);
+ $result = array_keys([1, 2, 3], 2, true);
+    ----------- end diff -----------
+
+Applied rules:
+ * StringComparisonArrayKeys
+
+
+ [OK] 4 files would have changed (dry-run) by Rector                                                                    
+
