@@ -47,7 +47,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->disableParallel();
 
     // phase3 means "revert compatibility functions"
-    $phase3Start = false;
+    $phase3Start = (bool) getenv('PHASE3_START');
 
     if ($phase3Start) {
         $rectorConfig->rules(
