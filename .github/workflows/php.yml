@@ -1,0 +1,114 @@
+name: Testing
+
+on:
+  push:
+    branches: [ "*" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  unit_tests:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['7.2', '7.4', '8.0', '8.1']
+        
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup PHP with pre-release PECL extension
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+
+    - name: phpunit
+      run: vendor/bin/phpunit --log-junit phpunit-result.xml tests
+
+  static_analysis:
+
+    runs-on: ubuntu-latest
+        
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup PHP with pre-release PECL extension
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: "8.3"
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+
+    - name: phpstan
+      run: vendor/bin/phpstan analyse --memory-limit=2G src/ tests/ functions/ --error-format=gitlab | tee phpstan.json
+    
+  integration_tests:
+    runs-on: ubuntu-latest
+        
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup PHP with pre-release PECL extension
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: "8.3"
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+
+    - name: Confirm expected changes with dry run
+      run: |
+        vendor/bin/rector --config tests/Examples/rector.php --dry-run --no-ansi > tests/IntegrationTests/actual.txt || true
+        diff -bu tests/IntegrationTests/expected.txt tests/IntegrationTests/actual.txt
+
+    - name: Update code with rector
+      run: vendor/bin/rector --config tests/Examples/rector.php
+
+    - name: Analyse code after changes
+      run: vendor/bin/phpstan analyse --memory-limit=2G tests/Rules/ --level 9 --error-format=gitlab | tee phpstan.json
+
+    - name: Rollback code with rector
+      run: PHASE3_START=1 vendor/bin/rector --config tests/Examples/rector.php > tests/IntegrationTests/rollback_actual.txt
+
+    - name: Assert rollback diff matches expectation
+      run: diff -bu tests/IntegrationTests/rollback_expected.txt tests/IntegrationTests/rollback_actual.txt
+
+    - name: Analyse code after rollback
+      run: vendor/bin/phpstan analyse --memory-limit=2G tests/Rules/ --level 9 --error-format=gitlab | tee phpstan.json

@@ -2,7 +2,7 @@
 4 files with changes
 ====================
 
-1) ../Rules/switch.php:0
+1) tests/Rules/switch.php:0
 
     ---------- begin diff ----------
 @@ @@
@@ -136,7 +136,7 @@ Applied rules:
  * SwitchWithPhp7Behavior
 
 
-2) ../Rules/in_array.php:0
+2) tests/Rules/in_array.php:0
 
     ---------- begin diff ----------
 @@ @@
@@ -153,7 +153,7 @@ Applied rules:
  * StringComparisonInArray
 
 
-3) ../Rules/array_search.php:0
+3) tests/Rules/array_search.php:0
 
     ---------- begin diff ----------
 @@ @@
@@ -170,7 +170,7 @@ Applied rules:
  * StringComparisonArraySearch
 
 
-4) ../Rules/array_keys.php:0
+4) tests/Rules/array_keys.php:0
 
     ---------- begin diff ----------
 @@ @@
