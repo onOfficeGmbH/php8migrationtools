@@ -99,13 +99,13 @@ jobs:
         diff -b tests/IntegrationTests/expected.txt tests/IntegrationTests/actual.txt
 
     - name: Update code with rector
-      run: php vendor/bin/rector --config tests/Examples/rector.php
+      run: vendor/bin/rector --config tests/Examples/rector.php
 
     - name: Analyse code after changes
       run: vendor/bin/phpstan analyse --memory-limit=2G tests/Rules/ --level 9 --error-format=gitlab | tee phpstan.json
 
     - name: Rollback code with rector
-      run: PHASE3_START=1 php vendor/bin/rector --config tests/Examples/rector.php > tests/IntegrationTests/rollback_actual.txt
+      run: PHASE3_START=1 vendor/bin/rector --config tests/Examples/rector.php > tests/IntegrationTests/rollback_actual.txt
 
     - name: Assert rollback diff matches expectation
       run: diff -b tests/IntegrationTests/rollback_expected.txt tests/IntegrationTests/rollback_actual.txt
