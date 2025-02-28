@@ -95,7 +95,7 @@ jobs:
 
     - name: Confirm expected changes with dry run
       run: |
-        php tests/IntegrationTests/vendor/bin/rector --config tests/Examples/rector.php --dry-run --no-ansi > tests/IntegrationTests/actual.txt || true
+        vendor/bin/rector --config tests/Examples/rector.php --dry-run --no-ansi > tests/IntegrationTests/actual.txt || true
         diff -b tests/IntegrationTests/expected.txt tests/IntegrationTests/actual.txt
 
     - name: Update code with rector
