@@ -96,7 +96,7 @@ jobs:
     - name: Confirm expected changes with dry run
       run: |
         vendor/bin/rector --config tests/Examples/rector.php --dry-run --no-ansi > tests/IntegrationTests/actual.txt || true
-        diff -b tests/IntegrationTests/expected.txt tests/IntegrationTests/actual.txt
+        diff -bu tests/IntegrationTests/expected.txt tests/IntegrationTests/actual.txt
 
     - name: Update code with rector
       run: vendor/bin/rector --config tests/Examples/rector.php
@@ -108,7 +108,7 @@ jobs:
       run: PHASE3_START=1 vendor/bin/rector --config tests/Examples/rector.php > tests/IntegrationTests/rollback_actual.txt
 
     - name: Assert rollback diff matches expectation
-      run: diff -b tests/IntegrationTests/rollback_expected.txt tests/IntegrationTests/rollback_actual.txt
+      run: diff -bu tests/IntegrationTests/rollback_expected.txt tests/IntegrationTests/rollback_actual.txt
 
     - name: Analyse code after rollback
       run: vendor/bin/phpstan analyse --memory-limit=2G tests/Rules/ --level 9 --error-format=gitlab | tee phpstan.json
