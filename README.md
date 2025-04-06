@@ -3,6 +3,23 @@
 PHP 8 introduced several changes to how type-loose comparison operators behave. These changes can lead to inconsistencies and unpredictable behavior when running PHP 7 code on PHP 8. 
 This toolbox helps maintainers of PHP codebases migrate their applications smoothly by identifying usages of type-unsafe operators that would otherwise have changed the behavior of their application.
 
+
+## Table of Contents
+
+- [Key Features](#key-features)
+- [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+    - [Setting up the Project](#setting-up-the-project)
+- [Refactoring](#refactoring)
+    - [Example Replacement](#example-replacement)
+- [Testing Your Code](#testing-your-code)
+- [Rolling Back](#rolling-back)
+- [Contributing](#contributing)
+    - [Steps to Contribute](#steps-to-contribute)
+- [License](#license)
+- [Support & Feedback](#support--feedback)
+
 ## Key Features
 
 - **Automatic Replacement of Comparison Operators:** Replace type-loose comparison operators (e.g., `==`, `!=`) with new custom replacement functions (like `c_eq` for `==`, `c_ne` for `!=`).
