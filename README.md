@@ -40,7 +40,7 @@ Add this library to your project using Composer. Add this snippet to your projec
     }
   ],
   "require": {
-    "onoffice/php8migrationtools": "dev-master"
+    "onoffice/php8migrationtools": "dev-main"
   },
   "require-dev": {
     "rector/rector": "^0.14.2"
