@@ -25,7 +25,7 @@ use onOffice\Migration\Php8\Rules\StringComparisonNotEquals;
 use onOffice\Migration\Php8\Rules\StringComparisonSpaceship;
 use onOffice\Migration\Php8\Rules\SwitchWithPhp7Behavior;
 use Rector\Config\RectorConfig;
-use Rector\Core\ValueObject\PhpVersion;
+use Rector\ValueObject\PhpVersion;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths(
