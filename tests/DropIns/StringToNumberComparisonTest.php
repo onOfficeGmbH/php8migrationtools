@@ -164,17 +164,17 @@ class StringToNumberComparisonTest extends TestCase
 
     public function testSpaceship(): void
     {
-        $this->assertEquals(0, StringToNumberComparison::spaceship(0, 'a'));
-        $this->assertEquals(1, StringToNumberComparison::spaceship('0.10', 0));
-        $this->assertEquals(-1, StringToNumberComparison::spaceship(0, '0.10'));
+        $this->assertSame(0, StringToNumberComparison::spaceship(0, 'a'));
+        $this->assertSame(1, StringToNumberComparison::spaceship('0.10', 0));
+        $this->assertSame(-1, StringToNumberComparison::spaceship(0, '0.10'));
     }
 
     public function testSpaceship_WithTrailingWhitespace(): void
     {
-        $this->assertEquals(1, StringToNumberComparison::spaceship('1 ', '1'));
-        $this->assertEquals(-1, StringToNumberComparison::spaceship('1', '1 '));
-        $this->assertEquals(0, StringToNumberComparison::spaceship('1', '1'));
-        $this->assertEquals(0, StringToNumberComparison::spaceship('1 ', '1 '));
+        $this->assertSame(1, StringToNumberComparison::spaceship('1 ', '1'));
+        $this->assertSame(-1, StringToNumberComparison::spaceship('1', '1 '));
+        $this->assertSame(0, StringToNumberComparison::spaceship('1', '1'));
+        $this->assertSame(0, StringToNumberComparison::spaceship('1 ', '1 '));
     }
 
     public function testInArray(): void
@@ -202,7 +202,7 @@ class StringToNumberComparisonTest extends TestCase
 
     public function testArraySearch(): void
     {
-        $this->assertEquals(0, StringToNumberComparison::arraySearch('a', [0], false));
+        $this->assertSame(0, StringToNumberComparison::arraySearch('a', [0], false));
     }
 
     public function testArraySearch_strict(): void
@@ -212,10 +212,10 @@ class StringToNumberComparisonTest extends TestCase
 
     public function testArrayKeys(): void
     {
-        $this->assertEquals([0 => 0], StringToNumberComparison::arrayKeys([0, 1, 2], 'a', false));
-        $this->assertEquals([0 => 0], StringToNumberComparison::arrayKeys([0, 1, 2], '0', false));
+        $this->assertSame([0 => 0], StringToNumberComparison::arrayKeys([0, 1, 2], 'a', false));
+        $this->assertSame([0 => 0], StringToNumberComparison::arrayKeys([0, 1, 2], '0', false));
 
-        $this->assertEquals(
+        $this->assertSame(
             [0 => 0, 1 => 1, 2 => 2],
             StringToNumberComparison::arrayKeys([0, 0, 0], 'a', false)
         );
@@ -223,9 +223,9 @@ class StringToNumberComparisonTest extends TestCase
 
     public function testArrayKeys_strict(): void
     {
-        $this->assertEquals([], StringToNumberComparison::arrayKeys([0, 1, 2], 'a', true));
-        $this->assertEquals([], StringToNumberComparison::arrayKeys([0, 1, 2], '0', true));
-        $this->assertEquals([], StringToNumberComparison::arrayKeys([0, 0, 0], 'a', true));
+        $this->assertSame([], StringToNumberComparison::arrayKeys([0, 1, 2], 'a', true));
+        $this->assertSame([], StringToNumberComparison::arrayKeys([0, 1, 2], '0', true));
+        $this->assertSame([], StringToNumberComparison::arrayKeys([0, 0, 0], 'a', true));
     }
 
     public function testEq_recursionDoesntMatch(): void
@@ -254,14 +254,14 @@ class StringToNumberComparisonTest extends TestCase
             $this->assertFalse(StringToNumberComparison::eq($innerConfig1, $innerConfig2));
             $this->fail(RuntimeException::class . ' expected!');
         } catch (RuntimeException $e) {
-            $this->assertEquals('Recursion limit of 180 was reached!', $e->getMessage());
+            $this->assertSame('Recursion limit of 180 was reached!', $e->getMessage());
         }
 
         try {
             $this->assertTrue(StringToNumberComparison::ne($innerConfig1, $innerConfig2));
             $this->fail(RuntimeException::class . ' expected!');
         } catch (RuntimeException $e) {
-            $this->assertEquals('Recursion limit of 180 was reached!', $e->getMessage());
+            $this->assertSame('Recursion limit of 180 was reached!', $e->getMessage());
         }
 
         StaticDI::reset();
@@ -463,7 +463,7 @@ class StringToNumberComparisonTest extends TestCase
                     $readableLeft = $this->getHumanReadableRepresentation($lhs);
                     $readableRight = $this->getHumanReadableRepresentation($rhs);
 
-                    $this->assertEquals(
+                    $this->assertSame(
                         $native,
                         $computed,
                         $cbComputed
