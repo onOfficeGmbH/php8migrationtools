@@ -90,7 +90,7 @@ class ContainerTest extends TestCase
     public function testGetConfiguration(): void
     {
         $diContainer = new Container();
-        $this->assertEquals([], $diContainer->getConfiguration());
+        $this->assertSame([], $diContainer->getConfiguration());
 
         $localTestClass = new class () implements DebugMode {
             public function isEnabled(): bool
@@ -100,7 +100,7 @@ class ContainerTest extends TestCase
         };
 
         $diContainer = new Container([DebugMode::class => get_class($localTestClass)]);
-        $this->assertEquals([DebugMode::class => get_class($localTestClass)], $diContainer->getConfiguration());
+        $this->assertSame([DebugMode::class => get_class($localTestClass)], $diContainer->getConfiguration());
         $this->assertInstanceOf(get_class($localTestClass), $diContainer->get(DebugMode::class));
     }
 }
