@@ -8,7 +8,7 @@ class RecursionInnerValue
 
     private $outerValue;
 
-    public function __construct(bool $bool, RecursionOuterValue $outerValue = null)
+    public function __construct(bool $bool, ?RecursionOuterValue $outerValue = null)
     {
         $this->bool = $bool;
         $this->outerValue = $outerValue;
